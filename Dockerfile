@@ -37,6 +37,10 @@ RUN wget -qO - https://www.mongodb.org/static/pgp/server-3.4.asc | sudo apt-key 
     echo "mongodb-org-shell hold" | sudo dpkg --set-selections && \
     echo "mongodb-org-mongos hold" | sudo dpkg --set-selections && \
     echo "mongodb-org-tools hold" | sudo dpkg --set-selections
+
+# Create the MongoDB data directory and give appropriate permissions
+RUN mkdir -p /data/db
+RUN sudo chown -R `id -un` /data/db
     
 # Install Redis 3.2.8
 RUN wget http://download.redis.io/releases/redis-3.2.8.tar.gz && \
@@ -52,6 +56,9 @@ RUN apt-get install -y \
     git \
     vim \
     htop
+
+# Install PM2 2.4.2 globally
+RUN . "$NVM_DIR/nvm.sh" && npm i pm2@2.4.2 -g
 
 # Set the working directory
 WORKDIR /root
